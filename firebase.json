@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "test-project-20210119",
+    "site": "voypost-tp-eduard-tsakhlo",
     "public": "build",
     "ignore": [
       "firebase.json",
