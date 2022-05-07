@@ -1,5 +1,6 @@
-import { Box } from '@mui/material';
 import React from 'react';
+import Box from '@mui/material/Box';
+import Header from '../Header';
 
 interface AuthenticatedLayoutProps {
   children: React.ReactElement;
@@ -8,7 +9,12 @@ interface AuthenticatedLayoutProps {
 const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
   children,
 }: AuthenticatedLayoutProps) => {
-  return <Box>{children}</Box>;
+  return (
+    <Box>
+      <Header />
+      <Box>{children}</Box>
+    </Box>
+  );
 };
 
 export default AuthenticatedLayout;
