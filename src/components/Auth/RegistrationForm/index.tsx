@@ -10,8 +10,7 @@ import Stack from '@mui/material/Stack';
 import { Snackbar } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { UIContext } from '../../Unknown/UIContext';
-import TextField from '../../FormElements/TextField';
-import PasswordField from '../../FormElements/PasswordField';
+import PasswordField from '../../Unknown/PasswordField';
 
 interface RegistrationFormValues extends FormikValues {
   email: string;
@@ -139,6 +138,7 @@ const RegistrationForm: React.FC = () => {
             onChange={formik.handleChange}
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
+            fullWidth
           />
           <PasswordField
             id="repeatedPassword"
@@ -153,6 +153,7 @@ const RegistrationForm: React.FC = () => {
             helperText={
               formik.touched.repeatedPassword && formik.errors.repeatedPassword
             }
+            fullWidth
           />
           <Button
             variant="contained"

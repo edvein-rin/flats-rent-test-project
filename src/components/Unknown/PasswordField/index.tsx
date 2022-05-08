@@ -14,7 +14,6 @@ const PasswordField: React.FC<TextFieldProps> = (props) => {
   return (
     <TextField
       variant="filled"
-      fullWidth
       type={isPasswordVisible ? 'text' : 'password'}
       InputProps={{
         endAdornment: (

@@ -9,8 +9,7 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { UIContext } from '../../Unknown/UIContext';
-import TextField from '../../FormElements/TextField';
-import PasswordField from '../../FormElements/PasswordField';
+import PasswordField from '../../Unknown/PasswordField';
 
 interface LoginFormValues extends FormikValues {
   email: string;
@@ -96,6 +95,7 @@ const LoginForm: React.FC = () => {
             onChange={formik.handleChange}
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
+            fullWidth
           />
           <Button
             variant="contained"
