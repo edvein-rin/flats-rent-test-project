@@ -7,6 +7,11 @@ const defaultTheme = createTheme({
     },
   },
   components: {
+    MuiTextField: {
+      defaultProps: {
+        variant: 'filled',
+      },
+    },
     MuiFilledInput: {
       styleOverrides: {
         root: {
