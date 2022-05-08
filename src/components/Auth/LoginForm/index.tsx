@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 import { UIContext } from '../../Unknown/UIContext';
 import TextField from '../../FormElements/TextField';
 import PasswordField from '../../FormElements/PasswordField';
@@ -86,6 +87,7 @@ const LoginForm: React.FC = () => {
             onChange={formik.handleChange}
             error={formik.touched.email && Boolean(formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}
+            fullWidth
           />
           <PasswordField
             name="password"

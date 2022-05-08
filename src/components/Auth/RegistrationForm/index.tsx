@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import { Snackbar } from '@mui/material';
+import TextField from '@mui/material/TextField';
 import { UIContext } from '../../Unknown/UIContext';
 import TextField from '../../FormElements/TextField';
 import PasswordField from '../../FormElements/PasswordField';
@@ -118,6 +119,7 @@ const RegistrationForm: React.FC = () => {
             onChange={formik.handleChange}
             error={formik.touched.email && Boolean(formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}
+            fullWidth
           />
           <TextField
             id="fullName"
@@ -127,6 +129,7 @@ const RegistrationForm: React.FC = () => {
             onChange={formik.handleChange}
             error={formik.touched.fullName && Boolean(formik.errors.fullName)}
             helperText={formik.touched.fullName && formik.errors.fullName}
+            fullWidth
           />
           <PasswordField
             id="password"
