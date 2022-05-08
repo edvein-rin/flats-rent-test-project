@@ -38,7 +38,8 @@ const validationSchema = yup.object({
     .min(12, 'Password should be of a minimum 12 characters length.'),
   repeatedPassword: yup
     .string()
-    .oneOf([yup.ref('password'), null], 'Passwords should match.'),
+    .oneOf([yup.ref('password'), null], 'Passwords should match.')
+    .required('Please repeat password.'),
 });
 
 const RegistrationForm: React.FC = () => {
