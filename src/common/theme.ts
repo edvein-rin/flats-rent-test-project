@@ -1,4 +1,5 @@
 import { createTheme } from '@mui/material';
+import { alpha } from '@mui/material/styles';
 
 const defaultTheme = createTheme({
   palette: {
@@ -28,7 +29,7 @@ const defaultTheme = createTheme({
       styleOverrides: {
         root: {
           '&.Mui-focused': {
-            color: 'rgba(0, 0, 0, 60%)',
+            color: alpha('#000', 0.6),
           },
         },
       },
