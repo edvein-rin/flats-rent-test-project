@@ -7,21 +7,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { grey } from '@mui/material/colors';
 
+import { fullNameToInitials } from '../../../common/fullNameToInitials';
 import clearFirestoreCache from '../../../common/clearFirestoreCache';
 import { UIContext } from '../UIContext';
-
-const fullNameToInitials = (fullName: string): string => {
-  const words = fullName.trim().split(' ');
-  const initials = words.reduce((acc, currentWord, index) => {
-    const isFirstWord = index === 0;
-    const isLastWord = index === words.length - 1;
-    if (isFirstWord || isLastWord) {
-      return `${acc}${currentWord.charAt(0).toUpperCase()}`;
-    }
-    return acc;
-  }, '');
-  return initials;
-};
 
 const UserProfileMenu: React.FC = () => {
   const history = useHistory();
@@ -29,7 +17,7 @@ const UserProfileMenu: React.FC = () => {
   const auth = useAuth();
   const { currentUser: user } = auth;
   const { displayName: userFullName } = user || {};
-  const userInitials = fullNameToInitials(userFullName || '');
+  const userInitials = fullNameToInitials(userFullName ?? '');
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
