@@ -1,7 +1,6 @@
 import React, { useContext, useCallback } from 'react';
 import { useFirebaseApp } from 'reactfire';
 import { useFormik, FormikValues, FormikHelpers } from 'formik';
-import * as yup from 'yup';
 import { useHistory } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -10,20 +9,13 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { UIContext } from '../../Unknown/UIContext';
 import PasswordField from '../../Unknown/PasswordField';
+import validationSchema from './validationSchema';
 
 interface LoginFormValues extends FormikValues {
   email: string;
   password: string;
 }
 type LoginFormHelpers = FormikHelpers<LoginFormValues>;
-
-const validationSchema = yup.object({
-  email: yup
-    .string()
-    .email('Please enter a valid email.')
-    .required('Email is required.'),
-  password: yup.string().required('Password is required.'),
-});
 
 const LoginForm: React.FC = () => {
   const history = useHistory();
