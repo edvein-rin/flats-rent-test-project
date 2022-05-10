@@ -5,7 +5,6 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { grey } from '@mui/material/colors';
 
 import { fullNameToInitials } from '../../../common/fullNameToInitials';
 import clearFirestoreCache from '../../../common/clearFirestoreCache';
@@ -67,7 +66,7 @@ const UserProfileMenu: React.FC = () => {
       >
         <Avatar
           sx={{
-            bgcolor: grey[400],
+            bgcolor: (theme) => theme.palette.grey[400],
           }}
         >
           {userInitials || 'U'}
