@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useState } from 'react';
 import { useAuth } from 'reactfire';
 import { useHistory } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -55,7 +56,7 @@ const UserProfileMenu: React.FC = () => {
   if (!user) return null;
 
   return (
-    <div>
+    <Box>
       <IconButton
         onClick={handleMenuClick}
         size="large"
@@ -83,7 +84,7 @@ const UserProfileMenu: React.FC = () => {
           Logout
         </MenuItem>
       </Menu>
-    </div>
+    </Box>
   );
 };
 
