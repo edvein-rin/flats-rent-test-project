@@ -1,7 +1,6 @@
 import React, { useContext, useCallback } from 'react';
 import { useAuth } from 'reactfire';
 import { useFormik, FormikValues, FormikHelpers } from 'formik';
-import { useHistory } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -20,32 +19,23 @@ interface LoginFormValues extends FormikValues {
 type LoginFormHelpers = FormikHelpers<LoginFormValues>;
 
 const LoginForm: React.FC = () => {
-  const history = useHistory();
   const auth = useAuth();
-  const { setAlert } = useContext(UIContext);
+  const { showErrorAlert } = useContext(UIContext);
 
   const handleSubmit = useCallback(
     async (
       { email, password }: LoginFormValues,
       { setSubmitting }: LoginFormHelpers,
     ) => {
-      auth
-        .signInWithEmailAndPassword(email, password)
-        .then(() => {
-          history.push('/');
-        })
-        .catch((error) => {
-          setAlert({
-            show: true,
-            severity: 'error',
-            message: error.message,
-          });
-        })
-        .finally(() => {
-          setSubmitting(false);
-        });
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+      } catch (error: unknown) {
+        showErrorAlert(error);
+      } finally {
+        setSubmitting(false);
+      }
     },
-    [setAlert, auth, history],
+    [showErrorAlert, auth],
   );
 
   const formik = useFormik<LoginFormValues>({

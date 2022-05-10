@@ -1,7 +1,6 @@
 import React, { useContext, useCallback } from 'react';
 import { useAuth } from 'reactfire';
 import { useFormik, FormikValues, FormikHelpers } from 'formik';
-import { useHistory } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -23,45 +22,42 @@ interface RegistrationFormValues extends FormikValues {
 type RegistrationFormHelpers = FormikHelpers<RegistrationFormValues>;
 
 const RegistrationForm: React.FC = () => {
-  const history = useHistory();
   const auth = useAuth();
-  const { setAlert, setSnackbar } = useContext(UIContext);
+  const { showErrorAlert, setSnackbar } = useContext(UIContext);
 
   const handleSubmit = useCallback(
     async (
       { email, password, fullName }: RegistrationFormValues,
       { setSubmitting }: RegistrationFormHelpers,
     ) => {
-      auth
-        .createUserWithEmailAndPassword(email, password)
-        .then((userCredentials) => {
-          const { user } = userCredentials;
-          user
-            ?.updateProfile({ ...user, displayName: fullName })
-            .finally(() => {
-              setSnackbar((handleClose) => (
-                <Snackbar
-                  open
-                  message={`Welcome on board ${String.fromCodePoint(0x1f680)}`}
-                  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                  onClose={handleClose}
-                />
-              ));
-              history.push('/');
-            });
-        })
-        .catch((error) => {
-          setAlert({
-            show: true,
-            severity: 'error',
-            message: error.message,
-          });
-        })
-        .finally(() => {
-          setSubmitting(false);
-        });
+      try {
+        const { user } = await auth.createUserWithEmailAndPassword(
+          email,
+          password,
+        );
+        if (!user) throw Error('No user exception');
+
+        try {
+          await user.updateProfile({ ...user, displayName: fullName });
+        } catch (error: unknown) {
+          showErrorAlert(error);
+        } finally {
+          setSnackbar((handleClose) => (
+            <Snackbar
+              open
+              message={`Welcome on board ${String.fromCodePoint(0x1f680)}`}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+              onClose={handleClose}
+            />
+          ));
+        }
+      } catch (error: unknown) {
+        showErrorAlert(error);
+      } finally {
+        setSubmitting(false);
+      }
     },
-    [setAlert, setSnackbar, auth, history],
+    [showErrorAlert, setSnackbar, auth],
   );
 
   const formik = useFormik<RegistrationFormValues>({
