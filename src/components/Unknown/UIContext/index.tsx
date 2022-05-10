@@ -2,10 +2,13 @@ import React, { createContext, useEffect, useState } from 'react';
 import Alert, { AlertColor } from '@mui/material/Alert';
 import Snackbar, { SnackbarProps } from '@mui/material/Snackbar';
 
+import { getErrorMessage } from '../../../common/getErrorMessage';
+
 export const UIContext = createContext<UIContextProps>({} as UIContextProps);
 
 interface UIContextProps {
   setAlert: React.Dispatch<React.SetStateAction<AlertProps>>;
+  showErrorAlert: (error: unknown) => void;
   setSnackbar: (
     snackbarConstructor: (
       handleClose: () => void,
@@ -66,11 +69,21 @@ export const UIContextProvider: React.FC = ({ children }) => {
     setSnackbarProps(snackbarConstructor(onSnackbarClose).props);
   };
 
+  const showErrorAlert = (error: unknown) => {
+    const errorMessage = getErrorMessage(error) ?? 'Unknown error.';
+    setAlert({
+      show: true,
+      severity: 'error',
+      message: errorMessage,
+    });
+  };
+
   return (
     <UIContext.Provider
       value={{
         setAlert,
         setSnackbar,
+        showErrorAlert,
       }}
     >
       {children}
