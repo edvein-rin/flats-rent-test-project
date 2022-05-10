@@ -1,5 +1,16 @@
+import React from 'react';
+import {
+  Link as RouterLink,
+  LinkProps as RouterLinkProps,
+} from 'react-router-dom';
 import { createTheme } from '@mui/material';
+import { LinkProps } from '@mui/material/Link';
 import { alpha } from '@mui/material/styles';
+
+const LinkBehavior = React.forwardRef<
+  HTMLAnchorElement,
+  Omit<RouterLinkProps, 'to'> & { href: RouterLinkProps['to'] }
+>(({ href, ...other }, ref) => <RouterLink ref={ref} to={href} {...other} />);
 
 const defaultTheme = createTheme({
   palette: {
@@ -13,6 +24,16 @@ const defaultTheme = createTheme({
     },
   },
   components: {
+    MuiLink: {
+      defaultProps: {
+        component: LinkBehavior,
+      } as LinkProps,
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        LinkComponent: LinkBehavior,
+      },
+    },
     MuiTextField: {
       defaultProps: {
         variant: 'filled',
