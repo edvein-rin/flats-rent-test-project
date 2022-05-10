@@ -53,7 +53,6 @@ const LoginForm: React.FC = () => {
         <Typography
           variant="h3"
           fontWeight="bold"
-          fontSize={40}
           letterSpacing={-1.5}
           align="center"
           color="common.black"

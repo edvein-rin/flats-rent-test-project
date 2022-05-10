@@ -7,6 +7,11 @@ const defaultTheme = createTheme({
       main: '#f50057',
     },
   },
+  typography: {
+    h3: {
+      fontSize: 40,
+    },
+  },
   components: {
     MuiTextField: {
       defaultProps: {
