@@ -4,9 +4,11 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+
 import Logo from '../../Unknown/Logo';
 import LoginForm from '../LoginForm';
 import RegistrationForm from '../RegistrationForm';
+
 import sideImageSrc from './side-image.png';
 import sideImageSrc2x from './side-image@2x.png';
 import sideImageSrc3x from './side-image@3x.png';

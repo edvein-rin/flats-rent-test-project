@@ -1,4 +1,5 @@
 import React from 'react';
+
 import logoSvg from './logo.svg';
 
 const Logo: React.FC = () => {
