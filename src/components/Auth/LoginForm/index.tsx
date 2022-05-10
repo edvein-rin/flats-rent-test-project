@@ -1,5 +1,5 @@
 import React, { useContext, useCallback } from 'react';
-import { useFirebaseApp } from 'reactfire';
+import { useAuth } from 'reactfire';
 import { useFormik, FormikValues, FormikHelpers } from 'formik';
 import { useHistory } from 'react-router-dom';
 import Box from '@mui/material/Box';
@@ -21,7 +21,7 @@ type LoginFormHelpers = FormikHelpers<LoginFormValues>;
 
 const LoginForm: React.FC = () => {
   const history = useHistory();
-  const auth = useFirebaseApp().auth();
+  const auth = useAuth();
   const { setAlert } = useContext(UIContext);
 
   const handleSubmit = useCallback(

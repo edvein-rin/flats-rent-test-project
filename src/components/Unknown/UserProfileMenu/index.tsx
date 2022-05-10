@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useState } from 'react';
-import { useFirebaseApp } from 'reactfire';
+import { useAuth } from 'reactfire';
 import { useHistory } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
@@ -26,8 +26,8 @@ const fullNameToInitials = (fullName: string): string => {
 const UserProfileMenu: React.FC = () => {
   const history = useHistory();
   const { setAlert } = useContext(UIContext);
-  const auth = useFirebaseApp().auth();
-  const { currentUser: user } = useFirebaseApp().auth();
+  const auth = useAuth();
+  const { currentUser: user } = auth;
   const { displayName: userFullName } = user || {};
   const userInitials = fullNameToInitials(userFullName || '');
 
