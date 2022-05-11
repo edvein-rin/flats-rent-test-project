@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import { Snackbar } from '@mui/material';
 import TextField from '@mui/material/TextField';
 
 import { UIContext } from '../../Unknown/UIContext';
@@ -23,7 +22,7 @@ type RegistrationFormHelpers = FormikHelpers<RegistrationFormValues>;
 
 const RegistrationForm: React.FC = () => {
   const auth = useAuth();
-  const { showErrorAlert, setSnackbar } = useContext(UIContext);
+  const { showErrorAlert, setAlert } = useContext(UIContext);
 
   const handleSubmit = useCallback(
     async (
@@ -42,14 +41,12 @@ const RegistrationForm: React.FC = () => {
         } catch (error: unknown) {
           showErrorAlert(error);
         } finally {
-          setSnackbar((handleClose) => (
-            <Snackbar
-              open
-              message={`Welcome on board ${String.fromCodePoint(0x1f680)}`}
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-              onClose={handleClose}
-            />
-          ));
+          setAlert({
+            show: true,
+            simple: true,
+            message: `Welcome on board ${String.fromCodePoint(0x1f680)}`,
+            position: { vertical: 'bottom', horizontal: 'center' },
+          });
         }
       } catch (error: unknown) {
         showErrorAlert(error);
@@ -57,7 +54,7 @@ const RegistrationForm: React.FC = () => {
         setSubmitting(false);
       }
     },
-    [showErrorAlert, setSnackbar, auth],
+    [showErrorAlert, setAlert, auth],
   );
 
   const formik = useFormik<RegistrationFormValues>({
