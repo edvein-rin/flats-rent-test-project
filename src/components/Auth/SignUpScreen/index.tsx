@@ -1,4 +1,6 @@
 import React from 'react';
+import makeStyles from '@mui/styles/makeStyles';
+import { Theme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -8,30 +10,64 @@ import Logo from '../../Unknown/Logo';
 import RegistrationForm from '../RegistrationForm';
 import SideImage from '../SideImage';
 
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    height: '100vh',
+    display: 'flex',
+    flexWrap: 'nowrap',
+  },
+  sideBlock: {
+    height: '100%',
+    [theme.breakpoints.up('xs')]: { display: 'none' },
+    [theme.breakpoints.up('md')]: { display: 'block' },
+    overflow: 'hidden',
+  },
+  main: {
+    height: '100%',
+    flexGrow: 1,
+    [theme.breakpoints.up('xs')]: {
+      padding: theme.spacing(2),
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: theme.spacing(6),
+    },
+  },
+  logoWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: theme.spacing(7),
+  },
+  formWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+  underlay: {
+    alignItems: 'center',
+  },
+  underlayTitle: {
+    fontWeight: 600,
+  },
+}));
+
 const SignUpScreen: React.FC = () => {
+  const classes = useStyles();
+
   return (
-    <Box height="100vh" display="flex" flexWrap="nowrap">
-      <Box
-        height="100%"
-        display={{
-          xs: 'none',
-          md: 'block',
-        }}
-        sx={{
-          overflow: 'hidden',
-        }}
-      >
+    <Box className={classes.root}>
+      <Box className={classes.sideBlock}>
         <SideImage />
       </Box>
-      <Stack height="100%" flexGrow={1} spacing={4} p={{ xs: 2, md: 6 }}>
-        <Box display="flex" justifyContent="center" alignItems="center" mt={7}>
+      <Stack className={classes.main} spacing={4}>
+        <Box className={classes.logoWrapper}>
           <Logo />
         </Box>
-        <Box flexGrow={1} display="flex" justifyContent="center">
+        <Box className={classes.formWrapper}>
           <RegistrationForm />
         </Box>
-        <Stack alignItems="center">
-          <Typography variant="subtitle2" fontWeight={600}>
+        <Stack className={classes.underlay}>
+          <Typography className={classes.underlayTitle} variant="subtitle2">
             Already have an account?
           </Typography>
           <Button variant="text" href="/login">

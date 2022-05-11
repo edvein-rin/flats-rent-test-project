@@ -1,6 +1,8 @@
 import React, { useContext, useCallback } from 'react';
 import { useAuth } from 'reactfire';
 import { useFormik, FormikValues, FormikHelpers } from 'formik';
+import makeStyles from '@mui/styles/makeStyles';
+import { Theme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -12,6 +14,23 @@ import PasswordField from '../../Unknown/PasswordField';
 
 import validationSchema from './validationSchema';
 
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    width: '100%',
+    maxWidth: 375,
+  },
+  header: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  headerText: {
+    fontWeight: 'bold',
+    letterSpacing: -1.5,
+    textAlign: 'center',
+    color: theme.palette.common.black,
+  },
+}));
+
 interface LoginFormValues extends FormikValues {
   email: string;
   password: string;
@@ -19,6 +38,8 @@ interface LoginFormValues extends FormikValues {
 type LoginFormHelpers = FormikHelpers<LoginFormValues>;
 
 const LoginForm: React.FC = () => {
+  const classes = useStyles();
+
   const auth = useAuth();
   const { showErrorAlert } = useContext(UIContext);
 
@@ -48,15 +69,9 @@ const LoginForm: React.FC = () => {
   });
 
   return (
-    <Box width="100%" maxWidth={375}>
-      <Box py={4}>
-        <Typography
-          variant="h3"
-          fontWeight="bold"
-          letterSpacing={-1.5}
-          align="center"
-          color="common.black"
-        >
+    <Box className={classes.root}>
+      <Box className={classes.header}>
+        <Typography className={classes.headerText} variant="h3">
           Login
         </Typography>
       </Box>
