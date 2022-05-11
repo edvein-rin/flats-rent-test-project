@@ -8,7 +8,7 @@ const validationSchema = yup.object({
   fullName: yup
     .string()
     .matches(
-      /^[A-Z][a-zA-Z]+(?: [A-Z][a-zA-Z]+)+$/,
+      /^\p{Lu}\p{Ll}+(?: \p{Lu}\p{Ll}+)+$/u,
       'Please enter a valid full name',
     )
     .required('Full name is required.'),
