@@ -1,15 +1,35 @@
 import React, { useContext, useCallback } from 'react';
-import { useFirebaseApp } from 'reactfire';
+import { useAuth } from 'reactfire';
 import { useFormik, FormikValues, FormikHelpers } from 'formik';
-import * as yup from 'yup';
-import { useHistory } from 'react-router-dom';
+import makeStyles from '@mui/styles/makeStyles';
+import { Theme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+
 import { UIContext } from '../../Unknown/UIContext';
 import PasswordField from '../../Unknown/PasswordField';
+
+import validationSchema from './validationSchema';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    width: '100%',
+    maxWidth: 375,
+  },
+  header: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  headerText: {
+    fontWeight: 'bold',
+    letterSpacing: -1.5,
+    textAlign: 'center',
+    color: theme.palette.common.black,
+  },
+}));
 
 interface LoginFormValues extends FormikValues {
   email: string;
@@ -17,41 +37,26 @@ interface LoginFormValues extends FormikValues {
 }
 type LoginFormHelpers = FormikHelpers<LoginFormValues>;
 
-const validationSchema = yup.object({
-  email: yup
-    .string()
-    .email('Please enter a valid email.')
-    .required('Email is required.'),
-  password: yup.string().required('Password is required.'),
-});
-
 const LoginForm: React.FC = () => {
-  const history = useHistory();
-  const auth = useFirebaseApp().auth();
-  const { setAlert } = useContext(UIContext);
+  const classes = useStyles();
+
+  const auth = useAuth();
+  const { showErrorAlert } = useContext(UIContext);
 
   const handleSubmit = useCallback(
     async (
       { email, password }: LoginFormValues,
       { setSubmitting }: LoginFormHelpers,
     ) => {
-      auth
-        .signInWithEmailAndPassword(email, password)
-        .then(() => {
-          history.push('/');
-        })
-        .catch((error) => {
-          setAlert({
-            show: true,
-            severity: 'error',
-            message: error.message,
-          });
-        })
-        .finally(() => {
-          setSubmitting(false);
-        });
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+      } catch (error: unknown) {
+        showErrorAlert(error);
+      } finally {
+        setSubmitting(false);
+      }
     },
-    [setAlert, auth, history],
+    [showErrorAlert, auth],
   );
 
   const formik = useFormik<LoginFormValues>({
@@ -64,16 +69,9 @@ const LoginForm: React.FC = () => {
   });
 
   return (
-    <Box width="100%" maxWidth={375}>
-      <Box py={4}>
-        <Typography
-          variant="h3"
-          fontWeight="bold"
-          fontSize={40}
-          letterSpacing={-1.5}
-          align="center"
-          color="common.black"
-        >
+    <Box className={classes.root}>
+      <Box className={classes.header}>
+        <Typography className={classes.headerText} variant="h3">
           Login
         </Typography>
       </Box>

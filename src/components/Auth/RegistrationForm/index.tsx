@@ -1,16 +1,35 @@
 import React, { useContext, useCallback } from 'react';
-import { useFirebaseApp } from 'reactfire';
+import { useAuth } from 'reactfire';
 import { useFormik, FormikValues, FormikHelpers } from 'formik';
-import * as yup from 'yup';
-import { useHistory } from 'react-router-dom';
+import makeStyles from '@mui/styles/makeStyles';
+import { Theme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import { Snackbar } from '@mui/material';
 import TextField from '@mui/material/TextField';
+
 import { UIContext } from '../../Unknown/UIContext';
 import PasswordField from '../../Unknown/PasswordField';
+
+import validationSchema from './validationSchema';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    width: '100%',
+    maxWidth: 375,
+  },
+  header: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  headerText: {
+    fontWeight: 'bold',
+    letterSpacing: -1.5,
+    textAlign: 'center',
+    color: theme.palette.common.black,
+  },
+}));
 
 interface RegistrationFormValues extends FormikValues {
   email: string;
@@ -20,68 +39,43 @@ interface RegistrationFormValues extends FormikValues {
 }
 type RegistrationFormHelpers = FormikHelpers<RegistrationFormValues>;
 
-const validationSchema = yup.object({
-  email: yup
-    .string()
-    .email('Please enter a valid email.')
-    .required('Email is required.'),
-  fullName: yup
-    .string()
-    .matches(
-      /^[A-Z][a-zA-Z]+(?: [A-Z][a-zA-Z]+)+$/,
-      'Please enter a valid full name',
-    )
-    .required('Full name is required.'),
-  password: yup
-    .string()
-    .required('Password is required.')
-    .min(12, 'Password should be of a minimum 12 characters length.'),
-  repeatedPassword: yup
-    .string()
-    .oneOf([yup.ref('password'), null], 'Passwords should match.')
-    .required('Please repeat password.'),
-});
-
 const RegistrationForm: React.FC = () => {
-  const history = useHistory();
-  const auth = useFirebaseApp().auth();
-  const { setAlert, setSnackbar } = useContext(UIContext);
+  const classes = useStyles();
+
+  const auth = useAuth();
+  const { showErrorAlert, setAlert } = useContext(UIContext);
 
   const handleSubmit = useCallback(
     async (
       { email, password, fullName }: RegistrationFormValues,
       { setSubmitting }: RegistrationFormHelpers,
     ) => {
-      auth
-        .createUserWithEmailAndPassword(email, password)
-        .then((userCredentials) => {
-          const { user } = userCredentials;
-          user
-            ?.updateProfile({ ...user, displayName: fullName })
-            .finally(() => {
-              setSnackbar((handleClose) => (
-                <Snackbar
-                  open
-                  message={`Welcome on board ${String.fromCodePoint(0x1f680)}`}
-                  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                  onClose={handleClose}
-                />
-              ));
-              history.push('/');
-            });
-        })
-        .catch((error) => {
+      try {
+        const { user } = await auth.createUserWithEmailAndPassword(
+          email,
+          password,
+        );
+        if (!user) throw Error('No user exception');
+
+        try {
+          await user.updateProfile({ ...user, displayName: fullName });
+        } catch (error: unknown) {
+          showErrorAlert(error);
+        } finally {
           setAlert({
             show: true,
-            severity: 'error',
-            message: error.message,
+            simple: true,
+            message: `Welcome on board ${String.fromCodePoint(0x1f680)}`,
+            position: { vertical: 'bottom', horizontal: 'center' },
           });
-        })
-        .finally(() => {
-          setSubmitting(false);
-        });
+        }
+      } catch (error: unknown) {
+        showErrorAlert(error);
+      } finally {
+        setSubmitting(false);
+      }
     },
-    [setAlert, setSnackbar, auth, history],
+    [showErrorAlert, setAlert, auth],
   );
 
   const formik = useFormik<RegistrationFormValues>({
@@ -96,16 +90,9 @@ const RegistrationForm: React.FC = () => {
   });
 
   return (
-    <Box width="100%" maxWidth={375}>
-      <Box py={4}>
-        <Typography
-          variant="h3"
-          fontWeight="bold"
-          fontSize={40}
-          letterSpacing={-1.5}
-          align="center"
-          color="common.black"
-        >
+    <Box className={classes.root}>
+      <Box className={classes.header}>
+        <Typography className={classes.headerText} variant="h3">
           Registration
         </Typography>
       </Box>

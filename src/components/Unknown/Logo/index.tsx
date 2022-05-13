@@ -1,8 +1,9 @@
 import React from 'react';
-import logoSvg from './logo.svg';
 
-const Logo: React.FC = () => {
-  return <img alt="Voypost logo" src={logoSvg} width={173} height={37} />;
-};
+import { ReactComponent as LogoComponent } from './logo.svg';
+
+const Logo: React.FC<React.ComponentProps<typeof LogoComponent>> = (props) => (
+  <LogoComponent width={173} height={37} {...props} />
+);
 
 export default Logo;

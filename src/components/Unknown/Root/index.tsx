@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { useUser } from 'reactfire';
+
 import AuthenticatedLayout from '../AuthenticatedLayout';
 import GuestLayout from '../GuestLayout';
 import HomeScreen from '../HomeScreen';
 import NotFoundScreen from '../NotFoundScreen';
-import AuthScreen from '../../Auth/AuthScreen';
+import SignInScreen from '../../Auth/SignInScreen';
+import SignUpScreen from '../../Auth/SignUpScreen';
+import FlatsScreen from '../../Flats/FlatsScreen';
 
 const Root: React.FC = () => {
   const {
@@ -38,6 +41,7 @@ const Root: React.FC = () => {
             path={['/login', '/registration']}
             component={() => <Redirect to="/" />}
           />
+          <Route exact path="/flats" component={() => <FlatsScreen />} />
           <Route path="*" component={NotFoundScreen} />
         </Switch>
       </AuthenticatedLayout>
@@ -48,16 +52,9 @@ const Root: React.FC = () => {
     <GuestLayout>
       <Switch>
         <Route exact path="/" component={() => <Redirect to="/login" />} />
-        <Route
-          exact
-          path="/login"
-          component={() => <AuthScreen type="login" />}
-        />
-        <Route
-          exact
-          path="/registration"
-          component={() => <AuthScreen type="registration" />}
-        />
+        <Route exact path="/login" component={() => <SignInScreen />} />
+        <Route exact path="/registration" component={() => <SignUpScreen />} />
+        <Route exact path="/flats" component={() => <Redirect to="/login" />} />
         <Route path="*" component={NotFoundScreen} />
       </Switch>
     </GuestLayout>

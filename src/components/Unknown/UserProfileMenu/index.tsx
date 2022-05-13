@@ -1,34 +1,36 @@
 import React, { useCallback, useContext, useState } from 'react';
-import { useFirebaseApp } from 'reactfire';
+import { useAuth } from 'reactfire';
 import { useHistory } from 'react-router-dom';
+import makeStyles from '@mui/styles/makeStyles';
+import { Theme } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { grey } from '@mui/material/colors';
+
+import { fullNameToInitials } from '../../../common/fullNameToInitials';
 import clearFirestoreCache from '../../../common/clearFirestoreCache';
 import { UIContext } from '../UIContext';
 
-const fullNameToInitials = (fullName: string): string => {
-  const words = fullName.trim().split(' ');
-  const initials = words.reduce((acc, currentWord, index) => {
-    const isFirstWord = index === 0;
-    const isLastWord = index === words.length - 1;
-    if (isFirstWord || isLastWord) {
-      return `${acc}${currentWord.charAt(0).toUpperCase()}`;
-    }
-    return acc;
-  }, '');
-  return initials;
-};
+const useStyles = makeStyles((theme: Theme) => ({
+  profileButton: {
+    color: 'inherit',
+  },
+  avatar: {
+    backgroundColor: theme.palette.grey[400],
+  },
+}));
 
 const UserProfileMenu: React.FC = () => {
+  const classes = useStyles();
+
   const history = useHistory();
   const { setAlert } = useContext(UIContext);
-  const auth = useFirebaseApp().auth();
-  const { currentUser: user } = useFirebaseApp().auth();
+  const auth = useAuth();
+  const { currentUser: user } = auth;
   const { displayName: userFullName } = user || {};
-  const userInitials = fullNameToInitials(userFullName || '');
+  const userInitials = fullNameToInitials(userFullName ?? '');
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -67,22 +69,16 @@ const UserProfileMenu: React.FC = () => {
   if (!user) return null;
 
   return (
-    <div>
+    <Box>
       <IconButton
+        className={classes.profileButton}
         onClick={handleMenuClick}
         size="large"
         aria-label={`${userInitials} profile`}
         aria-controls="user-profile-menu"
         aria-haspopup="true"
-        color="inherit"
       >
-        <Avatar
-          sx={{
-            bgcolor: grey[400],
-          }}
-        >
-          {userInitials || 'U'}
-        </Avatar>
+        <Avatar className={classes.avatar}>{userInitials || 'U'}</Avatar>
       </IconButton>
       <Menu
         id="user-profile-menu"
@@ -95,7 +91,7 @@ const UserProfileMenu: React.FC = () => {
           Logout
         </MenuItem>
       </Menu>
-    </div>
+    </Box>
   );
 };
 
