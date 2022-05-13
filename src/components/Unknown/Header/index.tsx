@@ -2,6 +2,7 @@ import React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import { Theme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -11,7 +12,10 @@ import UserProfileMenu from '../UserProfileMenu';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    position: 'static',
+    position: 'fixed',
+  },
+  headerOffset: {
+    minHeight: 64,
   },
   menuButton: {
     color: 'inherit',
@@ -26,22 +30,25 @@ const Header: React.FC = () => {
   const classes = useStyles();
 
   return (
-    <AppBar className={classes.root}>
-      <Toolbar>
-        <IconButton
-          className={classes.menuButton}
-          size="large"
-          edge="start"
-          aria-label="menu"
-        >
-          <MenuIcon />
-        </IconButton>
-        <Typography className={classes.spacer} variant="h6" component="div">
-          Voypost
-        </Typography>
-        <UserProfileMenu />
-      </Toolbar>
-    </AppBar>
+    <>
+      <AppBar className={classes.root}>
+        <Toolbar>
+          <IconButton
+            className={classes.menuButton}
+            size="large"
+            edge="start"
+            aria-label="menu"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography className={classes.spacer} variant="h6" component="div">
+            Voypost
+          </Typography>
+          <UserProfileMenu />
+        </Toolbar>
+      </AppBar>
+      <Box className={classes.headerOffset} />
+    </>
   );
 };
 
