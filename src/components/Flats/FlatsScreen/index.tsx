@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import qs from 'qs';
 import { useFirestore, useFirestoreCollectionData } from 'reactfire';
@@ -10,22 +10,15 @@ import { Flat } from '../../../../types';
 import SearchBar from '../../Unknown/SearchBar';
 import FlatsList from '../FlatsList';
 import autocompletePlace from '../../../common/autocompletePlace';
+import { UIContext } from '../../Unknown/UIContext';
 
 import useStyles from './useStyles';
 
 const FlatsScreen: React.FC = () => {
   const classes = useStyles();
-
   const history = useHistory();
-
   const firestore = useFirestore();
-  const flatsQuery = firestore
-    .collection('flats')
-    .orderBy('publishedAt', 'desc')
-    .limit(20);
-  const { status, data: flats } = useFirestoreCollectionData<Flat>(flatsQuery, {
-    idField: 'id',
-  });
+  const { showErrorAlert } = useContext(UIContext);
 
   const [searchParams, setSearchParams] = useState(
     qs.parse(window.location.search, { ignoreQueryPrefix: true }),
@@ -49,16 +42,34 @@ const FlatsScreen: React.FC = () => {
   }, [city]);
 
   useEffect(() => {
-    history.replace(
-      `${window.location.pathname}?${qs.stringify(searchParams)}`,
-    );
+    const formattedSearchParams = `?${qs.stringify(searchParams)}`;
+
+    if (window.location.search !== formattedSearchParams) {
+      history.replace(`${window.location.pathname}${formattedSearchParams}`);
+    }
   }, [history, searchParams]);
 
-  if (status === 'loading') return null;
+  const flatsQuery = firestore
+    .collection('flats')
+    .orderBy('publishedAt', 'desc')
+    .limit(20);
+  const flatsQueryWithCityFilter = city
+    ? flatsQuery.where('cityName', '==', city)
+    : flatsQuery;
+  const {
+    status,
+    data: flats,
+    error,
+  } = useFirestoreCollectionData<Flat>(flatsQueryWithCityFilter, {
+    idField: 'id',
+  });
 
-  const filteredFlats = city
-    ? flats.filter((flat) => flat.cityName === city)
-    : flats;
+  if (status === 'error') {
+    showErrorAlert(error);
+    return null;
+  }
+
+  const isLoaded = status === 'success';
 
   return (
     <Stack className={classes.root} spacing={5}>
@@ -77,7 +88,7 @@ const FlatsScreen: React.FC = () => {
       <Typography className={classes.title} variant="h5">
         Flats to rent
       </Typography>
-      <FlatsList flats={filteredFlats} />
+      {isLoaded && <FlatsList flats={flats} />}
     </Stack>
   );
 };
