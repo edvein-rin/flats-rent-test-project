@@ -50,7 +50,7 @@ const FlatsScreen: React.FC = () => {
 
   useEffect(() => {
     history.replace(
-      `${window.location.pathname.split('?')[0]}?${qs.stringify(searchParams)}`,
+      `${window.location.pathname}?${qs.stringify(searchParams)}`,
     );
   }, [history, searchParams]);
 
