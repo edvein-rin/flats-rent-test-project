@@ -78,7 +78,7 @@ const UserProfileMenu: React.FC = () => {
         aria-controls="user-profile-menu"
         aria-haspopup="true"
       >
-        <Avatar className={classes.avatar}>{userInitials || 'U'}</Avatar>
+        <Avatar className={classes.avatar}>{userInitials}</Avatar>
       </IconButton>
       <Menu
         id="user-profile-menu"
