@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Search as SearchIcon } from '@mui/icons-material';
@@ -18,13 +18,18 @@ const SearchBar: React.FC<Props> = ({
   options,
   ...restProps
 }) => {
+  const handleChange = useCallback(
+    (_, newValue: string) => {
+      setValue(newValue);
+    },
+    [setValue],
+  );
+
   return (
     <Autocomplete
       options={options || []}
       inputValue={value}
-      onInputChange={(e) =>
-        setValue((e?.target as unknown as { value: string })?.value)
-      }
+      onInputChange={handleChange}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -39,6 +44,9 @@ const SearchBar: React.FC<Props> = ({
           {...restProps}
         />
       )}
+      disableClearable
+      multiple={false}
+      freeSolo
     />
   );
 };
