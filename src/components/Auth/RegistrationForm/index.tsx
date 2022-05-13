@@ -1,8 +1,6 @@
 import React, { useContext, useCallback } from 'react';
 import { useAuth } from 'reactfire';
 import { useFormik, FormikValues, FormikHelpers } from 'formik';
-import makeStyles from '@mui/styles/makeStyles';
-import { Theme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -12,24 +10,8 @@ import TextField from '@mui/material/TextField';
 import { UIContext } from '../../Unknown/UIContext';
 import PasswordField from '../../Unknown/PasswordField';
 
+import useStyles from './useStyles';
 import validationSchema from './validationSchema';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    width: '100%',
-    maxWidth: 375,
-  },
-  header: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  headerText: {
-    fontWeight: 'bold',
-    letterSpacing: -1.5,
-    textAlign: 'center',
-    color: theme.palette.common.black,
-  },
-}));
 
 interface RegistrationFormValues extends FormikValues {
   email: string;

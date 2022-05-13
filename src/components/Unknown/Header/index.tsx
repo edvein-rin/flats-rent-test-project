@@ -1,6 +1,4 @@
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
-import { Theme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,21 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import UserProfileMenu from '../UserProfileMenu';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    position: 'fixed',
-  },
-  headerOffset: {
-    minHeight: 64,
-  },
-  menuButton: {
-    color: 'inherit',
-    marginRight: theme.spacing(2),
-  },
-  spacer: {
-    flexGrow: 1,
-  },
-}));
+import useStyles from './useStyles';
 
 const Header: React.FC = () => {
   const classes = useStyles();

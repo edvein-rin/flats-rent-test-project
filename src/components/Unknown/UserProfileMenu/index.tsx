@@ -1,8 +1,6 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { useAuth } from 'reactfire';
 import { useHistory } from 'react-router-dom';
-import makeStyles from '@mui/styles/makeStyles';
-import { Theme } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -13,14 +11,7 @@ import { fullNameToInitials } from '../../../common/fullNameToInitials';
 import clearFirestoreCache from '../../../common/clearFirestoreCache';
 import { UIContext } from '../UIContext';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  profileButton: {
-    color: 'inherit',
-  },
-  avatar: {
-    backgroundColor: theme.palette.grey[400],
-  },
-}));
+import useStyles from './useStyles';
 
 const UserProfileMenu: React.FC = () => {
   const classes = useStyles();
