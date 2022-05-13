@@ -1,14 +1,19 @@
 import React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
+import { Theme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    height: '100vh',
+    height: '100%',
+    width: '100%',
+  },
+  flatsButtonWrapper: {
+    width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
+    padding: theme.spacing(5),
   },
 }));
 
@@ -17,7 +22,11 @@ const HomeScreen: React.FC = () => {
 
   return (
     <Box className={classes.root}>
-      <Typography variant="h1">Home page</Typography>
+      <Box className={classes.flatsButtonWrapper}>
+        <Button variant="contained" href="/flats">
+          Explore flats
+        </Button>
+      </Box>
     </Box>
   );
 };
