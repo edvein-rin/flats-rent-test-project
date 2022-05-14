@@ -1,7 +1,7 @@
-export const getErrorMessage = (error: unknown): string | undefined => {
+export const getErrorMessage = (error: unknown): string => {
   if (typeof error === 'string') return error;
   if (error instanceof Error) return error.message;
-  return undefined;
+  return 'Something went wrong!';
 };
 
 export default getErrorMessage;

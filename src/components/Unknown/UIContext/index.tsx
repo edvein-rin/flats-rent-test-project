@@ -34,7 +34,7 @@ export const UIContextProvider: React.FC = ({ children }) => {
     });
 
   const showErrorAlert = (error: unknown) => {
-    const errorMessage = getErrorMessage(error) ?? 'Unknown error.';
+    const errorMessage = getErrorMessage(error);
     setAlert({
       show: true,
       severity: 'error',

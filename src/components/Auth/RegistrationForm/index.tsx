@@ -1,8 +1,7 @@
 import React, { useContext, useCallback } from 'react';
+import firebase from 'firebase';
 import { useAuth } from 'reactfire';
 import { useFormik, FormikValues, FormikHelpers } from 'formik';
-import makeStyles from '@mui/styles/makeStyles';
-import { Theme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -12,24 +11,8 @@ import TextField from '@mui/material/TextField';
 import { UIContext } from '../../Unknown/UIContext';
 import PasswordField from '../../Unknown/PasswordField';
 
+import useStyles from './useStyles';
 import validationSchema from './validationSchema';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    width: '100%',
-    maxWidth: 375,
-  },
-  header: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  headerText: {
-    fontWeight: 'bold',
-    letterSpacing: -1.5,
-    textAlign: 'center',
-    color: theme.palette.common.black,
-  },
-}));
 
 interface RegistrationFormValues extends FormikValues {
   email: string;
@@ -45,11 +28,19 @@ const RegistrationForm: React.FC = () => {
   const auth = useAuth();
   const { showErrorAlert, setAlert } = useContext(UIContext);
 
-  const handleSubmit = useCallback(
-    async (
-      { email, password, fullName }: RegistrationFormValues,
-      { setSubmitting }: RegistrationFormHelpers,
-    ) => {
+  const updateUserDisplayName = useCallback(
+    (user: firebase.User, displayName: string) => {
+      try {
+        return user.updateProfile({ ...user, displayName });
+      } catch (error: unknown) {
+        return new Promise<void>((resolve) => resolve(showErrorAlert(error)));
+      }
+    },
+    [showErrorAlert],
+  );
+
+  const createUser = useCallback(
+    async (email: string, password: string, displayName: string) => {
       try {
         const { user } = await auth.createUserWithEmailAndPassword(
           email,
@@ -57,25 +48,30 @@ const RegistrationForm: React.FC = () => {
         );
         if (!user) throw Error('No user exception');
 
-        try {
-          await user.updateProfile({ ...user, displayName: fullName });
-        } catch (error: unknown) {
-          showErrorAlert(error);
-        } finally {
-          setAlert({
-            show: true,
-            simple: true,
-            message: `Welcome on board ${String.fromCodePoint(0x1f680)}`,
-            position: { vertical: 'bottom', horizontal: 'center' },
-          });
-        }
+        await updateUserDisplayName(user, displayName);
+
+        setAlert({
+          show: true,
+          simple: true,
+          message: `Welcome on board ${String.fromCodePoint(0x1f680)}`,
+          position: { vertical: 'bottom', horizontal: 'center' },
+        });
       } catch (error: unknown) {
         showErrorAlert(error);
-      } finally {
-        setSubmitting(false);
       }
     },
-    [showErrorAlert, setAlert, auth],
+    [auth, showErrorAlert, setAlert, updateUserDisplayName],
+  );
+
+  const handleSubmit = useCallback(
+    async (
+      { email, password, fullName }: RegistrationFormValues,
+      { setSubmitting }: RegistrationFormHelpers,
+    ) => {
+      await createUser(email, password, fullName);
+      setSubmitting(false);
+    },
+    [createUser],
   );
 
   const formik = useFormik<RegistrationFormValues>({
