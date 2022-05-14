@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import { Flat } from '../../../../types';
 import SearchBar from '../../Unknown/SearchBar';
 import FlatsList from '../FlatsList';
-import autocompletePlace from '../../../common/autocompletePlace';
+import getPlacePredictions from '../../../common/getPlacePredictions';
 import { UIContext } from '../../Unknown/UIContext';
 
 import useStyles from './useStyles';
@@ -27,18 +27,33 @@ const FlatsScreen: React.FC = () => {
   const [city, setCity] = useState(
     (searchParams.city as string | undefined) ?? '',
   );
+  const [searchBarInputValue, setSearchBarInputValue] = useState(city);
 
-  const [citySuggestions, setCitySuggestions] = useState<string[] | undefined>(
+  const [cityPredictions, setCityPredictions] = useState<string[] | undefined>(
     undefined,
   );
+
+  useEffect(() => {
+    if (searchBarInputValue === '') {
+      setCity('');
+    }
+    getPlacePredictions(searchBarInputValue).then((predictions) => {
+      setCityPredictions(
+        Array.from(
+          new Set(
+            predictions.map(
+              (prediction) => prediction.structured_formatting.main_text,
+            ),
+          ),
+        ),
+      );
+    });
+  }, [searchBarInputValue]);
 
   useEffect(() => {
     setSearchParams((oldSearchParams) =>
       city ? { ...oldSearchParams, city } : {},
     );
-    autocompletePlace(city).then((suggestions) => {
-      setCitySuggestions(suggestions);
-    });
   }, [city]);
 
   useEffect(() => {
@@ -79,7 +94,9 @@ const FlatsScreen: React.FC = () => {
             label="City"
             value={city}
             setValue={setCity}
-            options={citySuggestions}
+            inputValue={searchBarInputValue}
+            setInputValue={setSearchBarInputValue}
+            options={cityPredictions}
             fullWidth
           />
         </Box>
