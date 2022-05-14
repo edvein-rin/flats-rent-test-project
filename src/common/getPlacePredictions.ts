@@ -1,4 +1,4 @@
-const getPlacePredictions = async (
+export const getPlacePredictions = async (
   place: string,
 ): Promise<google.maps.places.AutocompletePrediction[]> => {
   if (!place) return [];
