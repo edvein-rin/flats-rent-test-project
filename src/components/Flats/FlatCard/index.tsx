@@ -11,6 +11,8 @@ export interface Props {
   description?: string;
   dailyPriceUsd: number;
   photoUrl: string;
+  onDetailsButtonClick?: React.MouseEventHandler<HTMLButtonElement>;
+  selected: boolean;
 }
 
 const FlatCard: React.FC<Props> = ({
@@ -18,12 +20,17 @@ const FlatCard: React.FC<Props> = ({
   description,
   dailyPriceUsd,
   photoUrl,
+  onDetailsButtonClick,
+  selected,
 }) => {
   const classes = useStyles();
   const hasDescription = !!description;
 
   return (
-    <Card className={classes.root}>
+    <Card
+      className={classes.root}
+      variant={selected ? 'outlined' : 'elevation'}
+    >
       <Box className={classes.imageWrapper}>
         <img className={classes.image} alt="" src={photoUrl} />
       </Box>
@@ -39,7 +46,9 @@ const FlatCard: React.FC<Props> = ({
         )}
         <Box className={classes.spacer} />
         <Box>
-          <Button variant="outlined">Details</Button>
+          <Button variant="outlined" onClick={onDetailsButtonClick}>
+            Details
+          </Button>
         </Box>
       </Box>
     </Card>

@@ -39,9 +39,16 @@ const Root: React.FC = () => {
           <Route
             exact
             path={['/login', '/registration']}
-            component={() => <Redirect to="/" />}
+            render={() => <Redirect to="/" />}
           />
-          <Route exact path="/flats" component={() => <FlatsScreen />} />
+          <Route exact path="/flats" component={FlatsScreen} />
+          <Route
+            exact
+            path="/flats/:id"
+            render={({ match }) => (
+              <FlatsScreen selectedFlatId={match.params.id} />
+            )}
+          />
           <Route path="*" component={NotFoundScreen} />
         </Switch>
       </AuthenticatedLayout>
@@ -51,10 +58,13 @@ const Root: React.FC = () => {
   return (
     <GuestLayout>
       <Switch>
-        <Route exact path="/" component={() => <Redirect to="/login" />} />
-        <Route exact path="/login" component={() => <SignInScreen />} />
-        <Route exact path="/registration" component={() => <SignUpScreen />} />
-        <Route exact path="/flats" component={() => <Redirect to="/login" />} />
+        <Route
+          exact
+          path={['/', '/flats', '/flats/:id']}
+          render={() => <Redirect to="/login" />}
+        />
+        <Route exact path="/login" component={SignInScreen} />
+        <Route exact path="/registration" component={SignUpScreen} />
         <Route path="*" component={NotFoundScreen} />
       </Switch>
     </GuestLayout>
