@@ -13,6 +13,7 @@ import { formatSearchParams } from '../../../common/formatSearchParams';
 import SearchBar from '../../Unknown/SearchBar';
 import { UIContext } from '../../Unknown/UIContext';
 import FlatsList from '../FlatsList';
+import AddFlatFloatingButton from '../AddFlatFloatingButton';
 
 import useStyles from './useStyles';
 
@@ -115,51 +116,54 @@ const FlatsScreen: React.FC<FlatsScreenProps> = ({ selectedFlatId }) => {
   };
 
   return (
-    <Stack className={classes.root} direction="row">
-      <Stack className={classes.main} spacing={5}>
-        <Box>
-          <Box className={classes.searchBarWrapper}>
-            <SearchBar
-              label="City"
-              value={city}
-              setValue={setCity}
-              inputValue={searchBarInputValue}
-              setInputValue={setSearchBarInputValue}
-              options={cityPredictions}
-              fullWidth
-            />
+    <>
+      <Stack className={classes.root} direction="row">
+        <Stack className={classes.main} spacing={5}>
+          <Box>
+            <Box className={classes.searchBarWrapper}>
+              <SearchBar
+                label="City"
+                value={city}
+                setValue={setCity}
+                inputValue={searchBarInputValue}
+                setInputValue={setSearchBarInputValue}
+                options={cityPredictions}
+                fullWidth
+              />
+            </Box>
+            <Box className={classes.searchBarOffset} />
           </Box>
-          <Box className={classes.searchBarOffset} />
-        </Box>
-        <Typography className={classes.title} variant="h5">
-          Flats to rent
-        </Typography>
-        {areFlatsLoaded && (
-          <FlatsList
-            flats={flats}
-            onFlatDetailsButtonClick={onFlatDetailsButtonClick}
-            selectedFlatId={selectedFlatId}
-          />
-        )}
-      </Stack>
-      <Box className={classes.map}>
-        {isMapMessageVisible && (
-          <Typography variant="h6" fontWeight={600} color="common.white">
-            {mapMessage}
+          <Typography className={classes.title} variant="h5">
+            Flats to rent
           </Typography>
-        )}
-        {isMapVisible && selectedFlat && (
-          <GoogleMap
-            mapContainerStyle={{ width: '100%', height: '100%' }}
-            zoom={10}
-            center={{
-              lat: selectedFlat.latitude,
-              lng: selectedFlat.longitude,
-            }}
-          />
-        )}
-      </Box>
-    </Stack>
+          {areFlatsLoaded && (
+            <FlatsList
+              flats={flats}
+              onFlatDetailsButtonClick={onFlatDetailsButtonClick}
+              selectedFlatId={selectedFlatId}
+            />
+          )}
+        </Stack>
+        <Box className={classes.map}>
+          {isMapMessageVisible && (
+            <Typography variant="h6" fontWeight={600} color="common.white">
+              {mapMessage}
+            </Typography>
+          )}
+          {isMapVisible && selectedFlat && (
+            <GoogleMap
+              mapContainerStyle={{ width: '100%', height: '100%' }}
+              zoom={10}
+              center={{
+                lat: selectedFlat.latitude,
+                lng: selectedFlat.longitude,
+              }}
+            />
+          )}
+        </Box>
+      </Stack>
+      <AddFlatFloatingButton />
+    </>
   );
 };
 
