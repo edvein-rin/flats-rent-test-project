@@ -7,8 +7,8 @@ import { Flat } from '../../types/index';
 const flatValidationScheme = Joi.object({
   address: Joi.string().required(),
   cityName: Joi.string().required(),
-  description: Joi.string(),
-  dailyPriceUsd: Joi.number().positive().required(),
+  description: Joi.string().max(300),
+  dailyPriceUsd: Joi.number().positive().max(1000000).required(),
   latitude: Joi.number().required(),
   longitude: Joi.number().required(),
   photoUrl: Joi.string().required(),

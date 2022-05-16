@@ -5,8 +5,9 @@ const validationSchema = yup.object({
   pricePerNight: yup
     .number()
     .positive()
+    .max(1000000)
     .required('Price per night is required.'),
-  description: yup.string(),
+  description: yup.string().max(300),
 });
 
 export default validationSchema;
