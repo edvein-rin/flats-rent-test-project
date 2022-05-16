@@ -10,8 +10,6 @@ export const publishFlat = async (
 > =>
   flatsCollection.add({
     ...flat,
-    // TEMP
-    publishedAt: firebase.firestore.FieldValue.serverTimestamp(),
   });
 
 export default publishFlat;
