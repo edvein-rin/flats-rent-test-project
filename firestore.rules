@@ -6,7 +6,7 @@ service cloud.firestore {
     }
 
     match /flats/{uid} {
-      allow read: if isSignedIn();
+      allow read, create: if isSignedIn();
     }
   }
 }
