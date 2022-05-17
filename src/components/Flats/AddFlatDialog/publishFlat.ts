@@ -3,13 +3,10 @@ import firebase from 'firebase';
 import { Flat } from '../../../../types';
 
 export const publishFlat = async (
-  flatsCollection: firebase.firestore.CollectionReference<firebase.firestore.DocumentData>,
   flat: Omit<Flat, 'id' | 'publishedAt'>,
-): Promise<
-  firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
-> =>
-  flatsCollection.add({
-    ...flat,
-  });
+): Promise<Flat> => {
+  const createFlat = firebase.functions().httpsCallable('createFlat');
+  return (await createFlat(flat)).data as Flat;
+};
 
 export default publishFlat;

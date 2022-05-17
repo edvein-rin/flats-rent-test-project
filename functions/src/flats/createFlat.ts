@@ -1,8 +1,6 @@
 import admin from 'firebase-admin';
-import { firestore } from 'firebase-functions';
+import { https } from 'firebase-functions';
 import Joi from 'joi';
-
-import { Flat } from '../../types/index';
 
 const flatValidationScheme = Joi.object({
   address: Joi.string().required(),
@@ -14,25 +12,30 @@ const flatValidationScheme = Joi.object({
   photoUrl: Joi.string().required(),
 });
 
-export const createFlat = firestore
-  .document('flats/{id}')
-  .onCreate((snap, context) => {
-    const flat: Flat = {
-      ...(snap.data() as Flat),
-      id: context.params.id,
+export const createFlat = https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new https.HttpsError(
+      'unauthenticated',
+      'Only authenticated users are allowed to publish flats.',
+    );
+  }
+
+  const isDataValidFlat =
+    flatValidationScheme.validate(data).error === undefined;
+
+  if (isDataValidFlat) {
+    const flatDoc = admin.firestore().collection('flats').doc();
+    const flat = {
+      id: flatDoc.id,
+      ...data,
       publishedAt: admin.firestore.Timestamp.fromDate(new Date()),
     };
-    const isFlatValid = flatValidationScheme.validate(flat);
+    await flatDoc.set(flat, { merge: true });
 
-    const doc: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> =
-      snap.ref;
+    return flat;
+  }
 
-    if (isFlatValid) {
-      return doc.set(flat, {
-        merge: true,
-      });
-    }
-    return doc.delete();
-  });
+  throw new https.HttpsError('invalid-argument', 'The flat is not valid.');
+});
 
 export default { createFlat };
