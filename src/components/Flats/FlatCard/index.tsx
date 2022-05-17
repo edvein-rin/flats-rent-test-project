@@ -4,18 +4,20 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 
+import { Flat } from '../../../../types';
+
 import useStyles from './useStyles';
 
-export interface Props {
-  address: string;
-  description?: string;
-  dailyPriceUsd: number;
-  photoUrl: string;
+export interface FlatCardProps {
+  address: Flat['address'];
+  description?: Flat['description'];
+  dailyPriceUsd: Flat['dailyPriceUsd'];
+  photoUrl: Flat['photoUrl'];
   onDetailsButtonClick?: React.MouseEventHandler<HTMLButtonElement>;
   selected: boolean;
 }
 
-const FlatCard: React.FC<Props> = ({
+const FlatCard: React.FC<FlatCardProps> = ({
   address,
   description,
   dailyPriceUsd,

@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useFirestore } from 'reactfire';
 import { useHistory } from 'react-router-dom';
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -26,11 +25,11 @@ interface AddFlatFormValues extends FormikValues {
 }
 type AddFlatFormHelpers = FormikHelpers<AddFlatFormValues>;
 
-export interface Props extends DialogProps {
+export interface AddFlatDialogProps extends DialogProps {
   onClose: () => void;
 }
 
-const AddFlatDialog: React.FC<Props> = (props) => {
+const AddFlatDialog: React.FC<AddFlatDialogProps> = (props) => {
   const { onClose } = props;
 
   const [addressInputValue, setAddressInputValue] = useState('');
@@ -46,7 +45,6 @@ const AddFlatDialog: React.FC<Props> = (props) => {
 
   const history = useHistory();
   const { showErrorAlert, setAlert } = useContext(UIContext);
-  const flatsCollection = useFirestore().collection('flats');
 
   const constructFlatToPublish = useCallback(
     async (
@@ -96,7 +94,7 @@ const AddFlatDialog: React.FC<Props> = (props) => {
           description,
         );
 
-        const { id } = await publishFlat(flatsCollection, flatToPublish);
+        const { id } = await publishFlat(flatToPublish);
 
         setAlert({
           show: true,
@@ -116,14 +114,7 @@ const AddFlatDialog: React.FC<Props> = (props) => {
         setSubmitting(false);
       }
     },
-    [
-      constructFlatToPublish,
-      flatsCollection,
-      history,
-      onClose,
-      setAlert,
-      showErrorAlert,
-    ],
+    [constructFlatToPublish, history, onClose, setAlert, showErrorAlert],
   );
 
   const formik = useFormik<AddFlatFormValues>({

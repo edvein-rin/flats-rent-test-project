@@ -5,10 +5,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     height: '100%',
     width: '100%',
+    display: 'grid',
+    gridTemplateColumns: '45% 55%',
   },
   main: {
     height: '100%',
-    width: '45%',
     padding: theme.spacing(3),
   },
   map: {
@@ -16,9 +17,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     height: 'calc(100vh - 64px)',
-    width: '55%',
-    position: 'fixed',
-    right: 0,
+    position: 'sticky',
+    top: 64,
     background: theme.palette.grey[400],
   },
   searchBarWrapper: {

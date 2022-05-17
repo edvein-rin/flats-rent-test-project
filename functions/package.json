@@ -12,7 +12,7 @@
     "logs": "firebase functions:log",
     "test": "jest --runInBand --passWithNoTests --forceExit"
   },
-  "main": "lib/src/index.js",
+  "main": "lib/index.js",
   "engines": {
     "node": "12"
   },
