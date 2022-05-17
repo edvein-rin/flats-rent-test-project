@@ -108,12 +108,13 @@ const FlatsScreen: React.FC<FlatsScreenProps> = ({ selectedFlatId }) => {
   const selectedFlat = flats?.find((flat) => flat.id === selectedFlatId);
   const isSelectedFlatLoaded = !!selectedFlat;
 
-  const mapMessage = (() => {
+  const getMapMessage = () => {
     if (!isThereSelectedFlat) return 'No flat selected';
     if (!areFlatsLoaded) return 'Loading flat details..';
     if (!isSelectedFlatLoaded) return 'Failed to load the flat';
     return undefined;
-  })();
+  };
+  const mapMessage = getMapMessage();
   const isMapMessageVisible = !!mapMessage;
   const isMapVisible = !isMapMessageVisible;
 
