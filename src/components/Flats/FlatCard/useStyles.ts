@@ -11,12 +11,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     display: 'flex',
     flexWrap: 'nowrap',
-    '> *': {
-      height: '100%',
-    },
   },
   imageWrapper: {
     overflow: 'hidden',
+    height: '100%',
     width: '50%',
   },
   image: {
@@ -25,6 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '100%',
   },
   infoBlock: {
+    height: '100%',
     width: '50%',
     display: 'flex',
     flexDirection: 'column',
