@@ -26,11 +26,11 @@ interface AddFlatFormValues extends FormikValues {
 }
 type AddFlatFormHelpers = FormikHelpers<AddFlatFormValues>;
 
-export interface Props extends DialogProps {
+export interface AddFlatDialogProps extends DialogProps {
   onClose: () => void;
 }
 
-const AddFlatDialog: React.FC<Props> = (props) => {
+const AddFlatDialog: React.FC<AddFlatDialogProps> = (props) => {
   const { onClose } = props;
 
   const [addressInputValue, setAddressInputValue] = useState('');
