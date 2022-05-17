@@ -1,5 +1,9 @@
 import React from 'react';
-import { CssBaseline, ThemeProvider } from '@mui/material';
+import {
+  CssBaseline,
+  ThemeProvider,
+  StyledEngineProvider,
+} from '@mui/material';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { FirebaseAppProvider } from 'reactfire';
 import { LoadScript, LoadScriptProps } from '@react-google-maps/api';
@@ -29,10 +33,12 @@ const App: React.FC = () => {
       <FirebaseAppProvider firebaseApp={firebaseApp}>
         <ThemeProvider theme={theme}>
           <Router basename={process.env.PUBLIC_URL || '/'}>
-            <CssBaseline />
-            <UIContextProvider>
-              <Root />
-            </UIContextProvider>
+            <StyledEngineProvider injectFirst>
+              <CssBaseline />
+              <UIContextProvider>
+                <Root />
+              </UIContextProvider>
+            </StyledEngineProvider>
           </Router>
         </ThemeProvider>
       </FirebaseAppProvider>
