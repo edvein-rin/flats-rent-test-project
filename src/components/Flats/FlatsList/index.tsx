@@ -18,7 +18,7 @@ const FlatsList: React.FC<FlatsListProps> = ({
   return (
     <Stack spacing={4}>
       {flats.map((flat) => {
-        const onDetailsButtonClick = onFlatDetailsButtonClick?.bind(null, flat);
+        const onDetailsButtonClick = () => onFlatDetailsButtonClick?.(flat);
         const isCardSelected = !!selectedFlatId && flat.id === selectedFlatId;
 
         return (
