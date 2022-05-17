@@ -1,5 +1,4 @@
 import React, { useContext, useCallback } from 'react';
-import firebase from 'firebase';
 import { useAuth } from 'reactfire';
 import { useFormik, FormikValues, FormikHelpers } from 'formik';
 import Box from '@mui/material/Box';
@@ -28,17 +27,6 @@ const RegistrationForm: React.FC = () => {
   const auth = useAuth();
   const { showErrorAlert, setAlert } = useContext(UIContext);
 
-  const updateUserDisplayName = useCallback(
-    (user: firebase.User, displayName: string) => {
-      try {
-        return user.updateProfile({ ...user, displayName });
-      } catch (error: unknown) {
-        return new Promise<void>((resolve) => resolve(showErrorAlert(error)));
-      }
-    },
-    [showErrorAlert],
-  );
-
   const createUser = useCallback(
     async (email: string, password: string, displayName: string) => {
       try {
@@ -48,7 +36,7 @@ const RegistrationForm: React.FC = () => {
         );
         if (!user) throw Error('No user exception');
 
-        await updateUserDisplayName(user, displayName);
+        await user.updateProfile({ ...user, displayName });
 
         setAlert({
           show: true,
@@ -60,7 +48,7 @@ const RegistrationForm: React.FC = () => {
         showErrorAlert(error);
       }
     },
-    [auth, showErrorAlert, setAlert, updateUserDisplayName],
+    [auth, showErrorAlert, setAlert],
   );
 
   const handleSubmit = useCallback(
