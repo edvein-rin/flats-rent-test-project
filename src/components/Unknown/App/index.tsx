@@ -10,6 +10,12 @@ import Root from '../Root';
 import { UIContextProvider } from '../UIContext';
 
 const App: React.FC = () => {
+  if (!process.env.REACT_APP_GOOGLE_MAPS_API_KEY) {
+    throw Error(
+      'Environment variable REACT_APP_GOOGLE_MAPS_API_KEY is not set.',
+    );
+  }
+
   // Separated array due to:
   // Performance warning! LoadScript has been reloaded unintentionally!
   // You should not pass `libraries` prop as new array.
@@ -17,7 +23,7 @@ const App: React.FC = () => {
 
   return (
     <LoadScript
-      googleMapsApiKey="AIzaSyCHLvl8KuMVe8Xpu0K8ZnKnk69e-lEHO1Q"
+      googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
       libraries={loadScriptLibraries}
     >
       <FirebaseAppProvider firebaseApp={firebaseApp}>
