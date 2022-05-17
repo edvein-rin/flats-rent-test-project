@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import qs from 'qs';
 import { useFirestore, useFirestoreCollectionData } from 'reactfire';
@@ -42,22 +42,29 @@ const FlatsScreen: React.FC<FlatsScreenProps> = ({ selectedFlatId }) => {
 
   const isThereSelectedFlat = !!selectedFlatId;
 
-  useEffect(() => {
+  const handleSearchBarInputValueChange = useCallback(async () => {
     if (searchBarInputValue === '') {
       setCity('');
     }
-    getPlacePredictions(searchBarInputValue).then((predictions) => {
-      setCityPredictions(
-        Array.from(
-          new Set(
-            predictions.map(
-              (prediction) => prediction.structured_formatting.main_text,
-            ),
+
+    const predictions = await getPlacePredictions(searchBarInputValue);
+    setCityPredictions(
+      Array.from(
+        new Set(
+          predictions.map(
+            (prediction) => prediction.structured_formatting.main_text,
           ),
         ),
-      );
-    });
+      ),
+    );
   }, [searchBarInputValue]);
+  useEffect(() => {
+    try {
+      handleSearchBarInputValueChange();
+    } catch (error) {
+      showErrorAlert(error);
+    }
+  }, [handleSearchBarInputValueChange, showErrorAlert]);
 
   useEffect(() => {
     setSearchParams((oldSearchParams) =>
